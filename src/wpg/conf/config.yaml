@@ -1,0 +1,117 @@
+#
+# Wildlife Protection Game
+# 
+# Copyright 2026 Carnegie Mellon University.
+# 
+# NO WARRANTY. THIS CARNEGIE MELLON UNIVERSITY AND SOFTWARE ENGINEERING INSTITUTE
+# MATERIAL IS FURNISHED ON AN "AS-IS" BASIS. CARNEGIE MELLON UNIVERSITY MAKES NO
+# WARRANTIES OF ANY KIND, EITHER EXPRESSED OR IMPLIED, AS TO ANY MATTER INCLUDING,
+# BUT NOT LIMITED TO, WARRANTY OF FITNESS FOR PURPOSE OR MERCHANTABILITY,
+# EXCLUSIVITY, OR RESULTS OBTAINED FROM USE OF THE MATERIAL. CARNEGIE MELLON
+# UNIVERSITY DOES NOT MAKE ANY WARRANTY OF ANY KIND WITH RESPECT TO FREEDOM FROM
+# PATENT, TRADEMARK, OR COPYRIGHT INFRINGEMENT.
+# 
+# Licensed under a BSD (SEI)-style license, please see license.txt or contact
+# permission@sei.cmu.edu for full terms.
+# 
+# [DISTRIBUTION STATEMENT A] This material has been approved for public release
+# and unlimited distribution.  Please see Copyright notice for non-US Government
+# use and distribution.
+# 
+# This Software includes and/or makes use of Third-Party Software each subject
+# to its own license.
+# 
+# DM26-0661
+
+# this block is used so that the user can (partially) override the configuration
+# with a file conf/wpg.yaml in their working directory
+defaults:
+  - _self_
+  - optional conf@_global_: wpg
+  - adapt: st1
+  - moe: default-moe
+hydra:
+  searchpath:
+    - file://.
+  sweep:
+    subdir: ${run}
+  job:
+    name: wpg
+
+# Default run number for multi-run experiments
+run: 0
+
+# Simulation configuration
+sim:
+
+  # number of steps the drone can fly (a.k.a. battery life
+  timeout: 100
+
+  # seed for random number generation
+  seed: null
+
+# Map configuration
+map:
+
+  # width of the map in cells
+  width: 20
+
+  # height of the map in cells
+  height: 20
+
+  # length of the side of the square poacher area in cells
+  poacher_area_size: 12
+
+  # Tree density (e.g., 0.25 means 25% of the map has trees)
+  # Note that this density may be adjusted when the map is
+  # generated to avoid isolated areas completely blocked off by trees.
+  tree_density: 0.25
+
+# Drone configuration
+drone:
+
+  # Range within which the drone can detect the poacher with a clear line of sight (LOS)
+  # When the drone is flying high, LOS is always clear. When flying low, it can be blocked by trees.
+  detection_range: 5
+
+  # Range within which the drone can take images of the poacher for identification.
+  id_range: 3
+
+  # The number of continuous ID images (one per step) required for identification.
+  continuous_id_count: 4
+
+  # The total number of ID images (one per step) required for identification.
+  total_id_count: 8
+
+  # Whether the drone can detect when the poacher is hiding as an action.
+  # This is based only on what the drone can infer. For example, it does not
+  # detect when the poacher is going towards a tree to hide.
+  poacher_hide_sensor: false
+
+# Poacher configuration
+poacher:
+
+  # Behavior of the poacher see reference table in the documentation.
+  behavior: 1
+
+  # Range within which the poacher can detect the drone with a clear line of sight (LOS)
+  # When the drone is flying high, LOS is always clear. When flying low, it can be blocked by trees.
+  detection_range: 2
+
+  # Probability that the poacher can detect within the detection conditions above.
+  detection_probability: 1.0
+
+  # For behaviors that have other adversarial actions in addition to hiding,
+  # this is the maximum distance that the poacher will move to hide.
+  # If no tree is within this distance, the poacher will use a different action
+  hide_tree_max_distance: 2
+
+  # Range for the poacher's gun.
+  gun_range: 1
+
+  # Probability that the poacher can hit the drone with the gun.
+  gun_accuracy: 0.7
+
+  # For behaviors with GPS denial, the probability that the poacher will jam GPS signal.
+  # If GPS is denied, it is denied for the entire simulation.
+  gps_denial_probability: 1.0

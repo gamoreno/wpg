@@ -1,0 +1,92 @@
+{
+  "strategies": [
+    {
+      "name": "Evade Gun Fire",
+      "condition": {
+        "and": [
+          { "var": "gun_fire" },
+          { "var": "poacher_visible" }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "evade_poacher",
+          "params": { "distance": 2.5 }
+        }
+      ],
+      "stoppable": false
+    },
+    {
+      "name": "Emergency RTB",
+      "condition": {
+          "var": "rtb_threshold"
+      },
+      "action": [
+        {
+          "tactic": "rtb",
+          "params": { }
+        }
+      ]
+    },
+    {
+      "name": "RTB",
+      "condition": {
+        "or": [
+          { "var": "poacher_identified" },
+          { "var": "abort" }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "rtb",
+          "params": { }
+        }
+      ]
+    },
+    {
+      "name": "Track&ID",
+      "condition": {
+        "and": [
+          { "var": "poacher_visible" },
+          { "!": [{ "var": "poacher_identified" }] }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "track_and_id",
+          "params": {"min_dist": 0}
+        }
+      ]
+    },
+    {
+      "name": "Search Poacher",
+      "condition": {
+        "and": [
+          { "var": "in_aoi" },
+          { "!": [{ "var": "poacher_identified" }] }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "search_poacher",
+          "params": { }
+        }
+      ]
+    },
+    {
+      "name": "Transit to AoI",
+      "condition": {
+        "and": [
+          { "!": [{ "var": "in_aoi" }] },
+          { "!": [{ "var": "poacher_identified" }] }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "transit_to_aoi",
+          "params": { }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "strategies": [
+    {
+      "name": "RTB",
+      "condition": {
+        "and": [
+          { "var": "can_navigate" },
+          {
+            "!": [
+              { "var": "at_base" }
+            ]
+          }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "rtb",
+          "params": { }
+        }
+      ],
+      "expectedOutcome": {
+        "and": [
+          { "var": "at_base" },
+          { "!": [{ "var": "in_aoi" }] }
+        ]
+      }
+
+    },
+    {
+      "name": "Track&ID",
+      "condition": {
+        "and": [
+          { "var": "can_navigate" },
+          { "var": "in_aoi" },
+          { "var": "poacher_visible" },
+          { "!": [{ "var": "poacher_identified" }] }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "track_and_id",
+          "params": {"min_dist": 2}
+        }
+      ],
+      "expectedOutcome":
+          { "var": "poacher_identified" }
+    },
+    {
+      "name": "Search Poacher",
+      "condition": {
+        "and": [
+          { "var": "can_navigate" },
+          { "var": "in_aoi"},
+          { "var": "flying_high" }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "search_poacher",
+          "params": { }
+        }
+      ],
+      "expectedOutcome":
+          { "var": "poacher_visible" }
+    },
+    {
+      "name": "Transit to AoI",
+      "condition": {
+        "and": [
+          { "var": "can_navigate" },
+          { "!": [{ "var": "in_aoi" }] }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "transit_to_aoi",
+          "params": { }
+        }
+      ],
+      "expectedOutcome": {
+        "and": [
+          { "!": [{ "var": "at_base" }] },
+          { "var": "in_aoi" }
+        ]
+      }
+    }
+  ]
+}

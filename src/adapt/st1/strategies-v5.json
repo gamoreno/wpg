@@ -1,0 +1,134 @@
+{
+  "strategies": [
+    {
+      "name": "Evade Gun Fire",
+      "condition": {
+        "and": [
+          { "var": "gun_fire" },
+          { "var": "poacher_visible" }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "evade_poacher",
+          "params": { "distance": 2.5 }
+        }
+      ],
+      "stoppable": false
+    },
+    {
+      "name": "Emergency RTB",
+      "condition": {
+          "var": "rtb_threshold"
+      },
+      "action": [
+        {
+          "tactic": "rtb",
+          "params": { }
+        }
+      ]
+    },
+    {
+      "name": "RTB",
+      "condition": {
+        "or": [
+          { "var": "poacher_identified" },
+          { "var": "abort" }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "rtb",
+          "params": { }
+        }
+      ]
+    },
+    {
+      "name": "Track&ID",
+      "condition": {
+        "and": [
+          { "var": "poacher_visible" },
+          { "var": "can_navigate" },
+          { "var": "flying_high" },
+          { "!": [{ "var": "poacher_identified" }] }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "track_and_id",
+          "params": {"min_dist": 0}
+        }
+      ]
+    },
+    {
+      "name": "Track&ID GPS denied",
+      "condition": {
+        "and": [
+          { "var": "poacher_visible" },
+          { "!": [{ "var": "poacher_identified" }] }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "fly_low",
+          "params": { }
+        },
+        {
+          "tactic": "low_alt_track_id",
+          "params": {"min_dist": 0}
+        }
+      ]
+    },
+    {
+      "name": "Search Poacher",
+      "condition": {
+        "and": [
+          { "var": "in_aoi" },
+          { "var": "can_navigate" },
+          { "var": "flying_high" },
+          { "!": [{ "var": "poacher_identified" }] }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "search_poacher",
+          "params": { }
+        }
+      ]
+    },
+    {
+      "name": "Search Poacher GPS denied",
+      "condition": {
+        "and": [
+          { "var": "in_aoi" },
+          { "!": [{ "var": "poacher_identified" }] }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "fly_low",
+          "params": { }
+        },
+        {
+          "tactic": "low_alt_search",
+          "params": { }
+        }
+      ]
+    },
+    {
+      "name": "Transit to AoI",
+      "condition": {
+        "and": [
+          { "!": [{ "var": "in_aoi" }] },
+          { "!": [{ "var": "poacher_identified" }] }
+        ]
+      },
+      "action": [
+        {
+          "tactic": "transit_to_aoi",
+          "params": { }
+        }
+      ]
+    }
+  ]
+}
